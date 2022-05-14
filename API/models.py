@@ -31,7 +31,7 @@ class Client(AbstractUser):
         (1, "Erkak"),
         (2,"Ayol")]
     gender = models.CharField(max_length=30, choices=type_g)
-    register_date = models.DateField(auto_now=True)
+    register_date = models.DateField()
     week_result = models.IntegerField()
     avarage = models.IntegerField(default=0)
     age = models.IntegerField(null=True,blank=True)
@@ -49,16 +49,19 @@ class Client(AbstractUser):
     def __str__(self): 
         return self.username
 
+
+
 class TaskSport(models.Model):
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
-    
-    limit = models.DateField()
+    activity = models.ForeignKey(Sport, on_delete=models.CASCADE)
+    duration = models.IntegerField()
+
 
 class TaskDieta(models.Model):
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
-    morning_product = models.ManyToManyField(Product)
-    lunch_product = models.ManyToManyField(Product)
-    night_product = models.ManyToManyField(Product)
+    morning = models.ManyToManyField(Product, related_name='morning_time')
+    lunch = models.ManyToManyField(Product, related_name='lunch_time')
+    night = models.ManyToManyField(Product)
 
     limit = models.DateField()
 
