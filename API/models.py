@@ -3,15 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
 # Create your models here.
 
-class TaskSport(models.Model):
-    pass
-
-class TaskDieta(models.Model):
-    pass
-
-class TaskAll(models.Model):
-    pass
-
 class CategoryProduct(models.Model):
     name = models.CharField(max_length=255)
     def __str__(self):
@@ -30,22 +21,50 @@ class Sport(models.Model):
     def __str__(self):
         return self.name
 
+class Day(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+
 class Client(AbstractUser):
     type_g = [
         (1, "Erkak"),
         (2,"Ayol")]
     gender = models.CharField(max_length=30, choices=type_g)
     register_date = models.DateField(auto_now=True)
-    age = models.IntegerField(null=True)
-    height = models.IntegerField(null=True)
-    weight = models.FloatField(null=True)
-    task_sport = models.ManyToManyField(TaskSport,)
+    week_result = models.IntegerField()
+    avarage = models.IntegerField(default=0)
+    age = models.IntegerField(null=True,blank=True)
+    height = models.IntegerField(null=True,blank=True)
+    weight = models.FloatField(null=True,blank=True)
     task_sport_can_not = models.ManyToManyField(Sport,)
-
-    task_dieta = models.ManyToManyField(TaskDieta)
+    days = models.ManyToManyField(Day)
     task_dieta_can_not = models.ManyToManyField(Sport, related_name="NoDieta")
-    
-    task_all = models.ManyToManyField(TaskAll,)
+    type_t = [
+        (1,"Dieta"),
+        (2,"Sport"),
+        (3,"All")] 
+    task_type = models.CharField(max_length=30,choices=type_t)
     
     def __str__(self): 
         return self.username
+
+class TaskSport(models.Model):
+    client = models.ForeignKey(Client,on_delete=models.CASCADE)
+    
+    limit = models.DateField()
+
+class TaskDieta(models.Model):
+    client = models.ForeignKey(Client,on_delete=models.CASCADE)
+    morning_product = models.ManyToManyField(Product)
+    lunch_product = models.ManyToManyField(Product)
+    night_product = models.ManyToManyField(Product)
+
+    limit = models.DateField()
+
+class Advice(models.Model):
+    title = models.CharField(max_length=255)
+    text = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.text
