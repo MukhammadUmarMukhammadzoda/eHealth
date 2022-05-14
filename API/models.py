@@ -45,6 +45,12 @@ class Client(AbstractUser):
         (2,"Sport"),
         (3,"All")] 
     task_type = models.CharField(max_length=30,choices=type_t)
+    user_type = models.IntegerField(choices=(
+        (1, "client"),
+        (2, "admin"),
+        (3, "doctor")
+    ), default=1)
+    
     
     def __str__(self): 
         return self.username
@@ -62,7 +68,6 @@ class TaskDieta(models.Model):
     morning = models.ManyToManyField(Product, related_name='morning_time')
     lunch = models.ManyToManyField(Product, related_name='lunch_time')
     night = models.ManyToManyField(Product)
-
     limit = models.DateField()
 
 class Advice(models.Model):

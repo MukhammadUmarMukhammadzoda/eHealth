@@ -2,8 +2,6 @@ from multiprocessing.connection import Client
 from django.contrib import admin
 from .models import *
 
-from API.models import *
-
 # Register your models here.
 admin.site.register(Client)
 admin.site.register(Product)
