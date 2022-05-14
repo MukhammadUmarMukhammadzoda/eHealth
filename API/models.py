@@ -23,10 +23,31 @@ class Sport(models.Model):
 
 class Day(models.Model):
     name = models.CharField(max_length=255)
+
     def __str__(self):
         return self.name
 
 class Client(AbstractUser):
+    user_type = models.IntegerField(choices=(
+        (1, "client"),
+        (2, "expert")
+    ), default=1)
+    
+    def __str__(self): 
+        return self.username
+
+class Expert(models.Model):
+    client = models.ForeignKey(Client,on_delete=models.CASCADE)
+    bio = models.TextField()
+    video = models.URLField()
+    reyting = models.FloatField(default=0)
+    reyting_count = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.client.username
+
+class User(models.Model):
+    client = models.ForeignKey(Client,on_delete=models.CASCADE)
     type_g = [
         (1, "Erkak"),
         (2,"Ayol")]
@@ -45,17 +66,16 @@ class Client(AbstractUser):
         (2,"Sport"),
         (3,"All")] 
     task_type = models.CharField(max_length=30,choices=type_t)
-    user_type = models.IntegerField(choices=(
-        (1, "client"),
-        (2, "admin"),
-        (3, "doctor")
-    ), default=1)
     
-    
-    def __str__(self): 
-        return self.username
+    def __str__(self):
+        return self.client.username
 
-
+class HistoryReyting(models.Model):
+    expert = models.ForeignKey(Expert,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    star = models.IntegerField()
+    def __str__(self):
+        return f"{self.user.client.username} : {str(self.star)} -> {self.expert.client.username}"
 
 class TaskSport(models.Model):
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
