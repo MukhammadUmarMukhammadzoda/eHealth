@@ -24,21 +24,21 @@ class Sport(models.Model):
         return self.name
 
 class Client(AbstractUser):
-    type_g = (
+    type_g = [
         (1, "Erkak"),
-        (2,"Ayol"))
-    gender = models.IntegerChoices(type_g)
+        (2,"Ayol")]
+    gender = models.CharField(max_length=30, choices=type_g)
     register_date = models.DateField(auto_now=True)
-    age = models.IntegerField()
-    height = models.IntegerField()
-    weight = models.FloatField()
-    task_sport = models.ManyToManyField(TaskSport,null=True,blank=True)
-    task_sport_can_not = models.ManyToManyField(Sport,null=True,blank=True)
+    age = models.IntegerField(null=True)
+    height = models.IntegerField(null=True)
+    weight = models.FloatField(null=True)
+    task_sport = models.ManyToManyField(TaskSport,)
+    task_sport_can_not = models.ManyToManyField(Sport,)
 
-    task_dieta = models.ManyToManyField(TaskDieta,null=True,blank=True)
-    task_dieta_can_not = models.ManyToManyField(Sport,null=True,blank=True)
+    task_dieta = models.ManyToManyField(TaskDieta)
+    task_dieta_can_not = models.ManyToManyField(Sport, related_name="NoDieta")
     
-    task_all = models.ManyToManyField(TaskAll,null=True,blank=True)
+    task_all = models.ManyToManyField(TaskAll,)
     
     def __str__(self): 
         return self.username
