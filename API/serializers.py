@@ -8,32 +8,56 @@ class ClientSerializer(serializers.ModelSerializer):
         fields = "__all__"
     
 
-class ClientSerializer(serializers.ModelSerializer):
+class ExpertSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = Expert
         fields = "__all__"
 
-class ClientSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = User
         fields = "__all__"
 
-class ClientSerializer(serializers.ModelSerializer):
+class HistoryReytingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = HistoryReyting
         fields = "__all__"
 
-class ClientSerializer(serializers.ModelSerializer):
+class TaskSportSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = TaskSport
         fields = "__all__"
 
-class ClientSerializer(serializers.ModelSerializer):
+class TaskDietaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = TaskDieta
         fields = "__all__"
 
-class ClientSerializer(serializers.ModelSerializer):
+class AdviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = Advice
         fields = "__all__"
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+class CategoryProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryProduct
+        fields = "__all__"
+
+
+class SportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sport
+        fields = "__all__"
+
+
+class DaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Day
+        fields = "__all__"
+
