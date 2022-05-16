@@ -33,22 +33,28 @@ def View_Register(request):
             age = request.POST['age']
             height = request.POST['height']
             weight = request.POST['weight']
-            type_t = request.POST['type_t']
+            type_t = int(request.POST['type_t'])
             can_not_dieta = []
             can_not_sports = []
+            user = User.objects.create(
+                gender=int(type_g),register_date=register_date,week_result=weight,age=age,
+                weight=weight,height=height,task_type=type_t,
+                username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=type_client)
+            
             if type_t == 1 or type_t == 3:
                 not_sports = request.POST['can_not_sports']
                 for id in not_sports:
-                    can_not_sports.append(Sport.objects.get(id=id))
+                    id = int(id)
+                    user.task_sport_can_not.add(Sport.objects.get(id=id))
                 
             if type_t == 2 or type_t == 3:
                 not_dieta = request.POST['can_not_dieta']
                 for id in not_dieta:
-                    can_not_dieta.append(Product.objects.get(id=id))
-            user = User.objects.create(
-                gender=type_g,register_date=register_date,week_result=weight,age=age,
-                weight=weight,height=height,task_sport_can_not=can_not_sports,task_dieta_can_not=can_not_dieta,task_type=type_t,
-                username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=type_client)
+                    id = int(id)
+                    user.task_dieta_can_not.add(Product.objects.get(id=id))
+            # user.task_sport_can_not = can_not_sports
+            # user.task_dieta_can_not = can_not_dieta
+            # user.save()
         token_key = Token.objects.create(user=user)
         DATA = {
                 "username":username,
@@ -58,3 +64,26 @@ def View_Register(request):
         return Response(DATA)
     else:
         return Response(status=400)
+
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+def View_Task_Type(request):
+    type=request.GET['type']
+    DATA = {}
+    if type == 'product':
+        DATA = LoaderProduct(Product.objects.all(),many=True).data
+    else:
+        DATA = LoaderSport(Sport.objects.all(),many=True).data
+    return Response(DATA)
+
+@api_view(['get','post'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+def View_Task_Type(request):
+    if request.method == 'GET':    
+        DATA = {}
+        DATA = LoaderCategoryProduct(CategoryProduct.objects.all(),many=True).data
+        return Response(DATA)
+    
+    return Response(status=100)
