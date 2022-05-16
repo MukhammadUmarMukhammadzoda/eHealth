@@ -39,7 +39,7 @@ class Client(AbstractUser):
 class Expert(models.Model):
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
     bio = models.TextField()
-    video = models.URLField()
+    video = models.URLField(null=True,blank=True)
     reyting = models.FloatField(default=0)
     reyting_count = models.IntegerField(default=0)
 
@@ -51,7 +51,7 @@ class User(models.Model):
     type_g = [
         (1, "Erkak"),
         (2,"Ayol")]
-    gender = models.CharField(max_length=30, choices=type_g)
+    gender = models.IntegerField(choices=type_g)
     register_date = models.DateField()
     week_result = models.IntegerField()
     avarage = models.IntegerField(default=0)
@@ -65,7 +65,7 @@ class User(models.Model):
         (1,"Dieta"),
         (2,"Sport"),
         (3,"All")] 
-    task_type = models.CharField(max_length=30,choices=type_t)
+    task_type = models.IntegerField(choices=type_t)
     
     def __str__(self):
         return self.client.username
