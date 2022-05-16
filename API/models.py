@@ -53,13 +53,12 @@ class User(models.Model):
         (2,"Ayol")]
     gender = models.IntegerField(choices=type_g)
     register_date = models.DateField()
-    week_result = models.IntegerField()
+    week_result = models.IntegerField(default=0)
     avarage = models.IntegerField(default=0)
     age = models.IntegerField(null=True,blank=True)
     height = models.IntegerField(null=True,blank=True)
     weight = models.FloatField(null=True,blank=True)
     task_sport_can_not = models.ManyToManyField(Sport,)
-    days = models.ManyToManyField(Day)
     task_dieta_can_not = models.ManyToManyField(Sport, related_name="NoDieta")
     type_t = [
         (1,"Dieta"),
