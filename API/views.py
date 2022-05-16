@@ -22,13 +22,11 @@ def View_Register(request):
     password = request.POST['password']
     first_name = request.POST['first_name']
     last_name = request.POST['last_name']
-    if len(Client.objects.filter(username=username)) == 0:
-        client = Client.objects.create(username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=type_client)
-        token_key = Token.objects.create(user=client)
-        if type_client == 'Expert':
+    if len(User.objects.filter(username=username)) == 0:
+        if type_client == '2':
             bio = request.POST['bio']
             video = request.POST['video']
-            expert = Expert.objects.create(client=client,bio=bio,video=video)
+            user = User.objects.create(username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=int(type_client),bio=bio,video=video)
         else:
             type_g = request.POST['type_g']
             register_date = datetime.datetime.now()
@@ -47,12 +45,16 @@ def View_Register(request):
                 not_dieta = request.POST['can_not_dieta']
                 for id in not_dieta:
                     can_not_dieta.append(Product.objects.get(id=id))
-            user = User.objects.create(client=client,gender=type_g,register_date=register_date,week_result=weight,age=age,weight=weight,height=height,task_sport_can_not=can_not_sports,task_dieta_can_not=can_not_dieta,task_type=type_t)
-            DATA = {
+            user = User.objects.create(
+                gender=type_g,register_date=register_date,week_result=weight,age=age,
+                weight=weight,height=height,task_sport_can_not=can_not_sports,task_dieta_can_not=can_not_dieta,task_type=type_t,
+                username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=type_client)
+        token_key = Token.objects.create(user=user)
+        DATA = {
                 "username":username,
-                "key":token_key,
+                "key":str(token_key),
                 "type_client":type_client,
             }
-            return Response(DATA)
+        return Response(DATA)
     else:
         return Response(status=400)

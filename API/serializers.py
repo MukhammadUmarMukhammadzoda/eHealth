@@ -21,11 +21,6 @@ class LoaderDay(ModelSerializer):
         model = Day
         fields = "__all__"
 
-class LoaderExpert(ModelSerializer):
-    class Meta:
-        model = Expert
-        fields = "__all__"
-
 class LoaderUser(ModelSerializer):
     class Meta:
         model = User
