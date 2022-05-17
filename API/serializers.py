@@ -16,9 +16,9 @@ class LoaderSport(ModelSerializer):
         model = Sport
         fields = "__all__"
 
-class LoaderDay(ModelSerializer):
+class LoaderComment(ModelSerializer):
     class Meta:
-        model = Day
+        model = Comment
         fields = "__all__"
 
 class LoaderUser(ModelSerializer):
@@ -44,4 +44,9 @@ class LoaderTaskDieta(ModelSerializer):
 class LoaderAdvice(ModelSerializer):
     class Meta:
         model = Advice
+        fields = "__all__"
+
+class LoaderNew(ModelSerializer):
+    class Meta:
+        model = New
         fields = "__all__"

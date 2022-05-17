@@ -30,6 +30,8 @@ def check_algoritm(obj):
 def a_day_kaloriya(kg:int):
     return int(kg*15)
 
+
+
 def algoritm_loss(days:int,kg:int):
     one_kg_kk = 3500
     have_to_loss_a_day = int(int(kg*one_kg_kk) / days)
