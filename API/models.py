@@ -11,43 +11,23 @@ class CategoryProduct(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     category = models.ForeignKey(CategoryProduct,on_delete=models.CASCADE)
+    kaloriya = models.IntegerField()
 
     def __str__(self):
         return self.name
 
 class Sport(models.Model):
     name = models.CharField(max_length=255)
-    video = models.URLField()
-    def __str__(self):
-        return self.name
-
-class Day(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-# class Client(AbstractUser):
-#     user_type = models.IntegerField(choices=(
-#         (1, "client"),
-#         (2, "expert")
-#     ), default=1)
+    video = models.URLField(null=True,blank=True)
+    kaloriya = models.IntegerField()
     
-#     def __str__(self): 
-#         return self.username
-
-# class Expert(models.Model):
-#     client = models.ForeignKey(Client,on_delete=models.CASCADE)
-#     bio = models.TextField()
-#     video = models.URLField(null=True,blank=True)
-#     reyting = models.FloatField(default=0)
-#     reyting_count = models.IntegerField(default=0)
-
-#     def __str__(self):
-#         return self.client.username
+    def __str__(self):
+        return self.name
 
 class User(AbstractUser):
     # client = models.ForeignKey(Client,on_delete=models.CASCADE)
+    going_to_loss = models.IntegerField(default=0,null=True,blank=True)
+    going_to_loss_day = models.IntegerField(default=0,null=True,blank=True)
     user_type = models.IntegerField(choices=(
         (1, "client"),
         (2, "expert")
@@ -77,6 +57,14 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+
+class Comment(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.name
+
 class HistoryReyting(models.Model):
     expert = models.ForeignKey(User,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="from_user")
@@ -97,9 +85,26 @@ class TaskDieta(models.Model):
     night = models.ManyToManyField(Product)
     limit = models.DateField()
 
+class New(models.Model):
+    title = models.CharField(max_length=255)
+    img = models.ImageField(upload_to='news/')
+    text = models.TextField(null=True,blank=True)
+    text2 = models.TextField(null=True,blank=True)
+    def __str__(self):
+        return self.title
+
 class Advice(models.Model):
     title = models.CharField(max_length=255)
     text = models.CharField(max_length=255)
 
     def __str__(self):
         return self.text
+
+class Normal(models.Model):
+    age_start = models.IntegerField()
+    age_end = models.IntegerField()
+    height = models.IntegerField(unique=True)
+    male_weight = models.FloatField()    
+    male_weight = models.FloatField()    
+    def __str__(self):
+        return str(self.height)

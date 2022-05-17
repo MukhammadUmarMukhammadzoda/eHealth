@@ -12,7 +12,30 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.viewsets import ModelViewSet
 
 def check_algoritm(obj):
-    pass
+    if obj.height % 2 != 0:
+        obj.height = obj.height -1
+    normals = Normal.objects.filter(age_start__lte=obj.age,age_end__gte=obj.age,height=obj.height)
+    norma = normals[0]
+    if obj.gender == 1:
+        if norma.male_weight < obj.height:
+            return norma.male_weight
+        else:
+            return False
+    else:
+        if norma.female_weight < obj.height:
+            return norma.female_weight
+        else:
+            return False
+
+def a_day_kaloriya(kg:int):
+    return int(kg*15)
+
+def algoritm_loss(days:int,kg:int):
+    one_kg_kk = 3500
+    have_to_loss_a_day = int(int(kg*one_kg_kk) / days)
+    
+    return have_to_loss_a_day   
+
 
 @api_view(['post'])
 def View_Register(request):
