@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
@@ -5,11 +6,17 @@ from rest_framework.authtoken.models import Token
 
 class CategoryProduct(models.Model):
     name = models.CharField(max_length=255)
+    en_name = models.CharField(max_length=255)
+    ru_name = models.CharField(max_length=255)
+    
     def __str__(self):
         return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
+    en_name = models.CharField(max_length=255)
+    ru_name = models.CharField(max_length=255)
+
     category = models.ForeignKey(CategoryProduct,on_delete=models.CASCADE)
     kaloriya = models.IntegerField()
 
@@ -18,6 +25,9 @@ class Product(models.Model):
 
 class Sport(models.Model):
     name = models.CharField(max_length=255)
+    en_name = models.CharField(max_length=255)
+    ru_name = models.CharField(max_length=255)
+    
     video = models.URLField(null=True,blank=True)
     kaloriya = models.IntegerField()
     
@@ -27,7 +37,6 @@ class Sport(models.Model):
 class User(AbstractUser):
     # client = models.ForeignKey(Client,on_delete=models.CASCADE)
     going_to_loss = models.IntegerField(default=0,null=True,blank=True)
-    going_to_loss_day = models.IntegerField(default=0,null=True,blank=True)
     user_type = models.IntegerField(choices=(
         (1, "client"),
         (2, "expert")
@@ -61,7 +70,7 @@ class User(AbstractUser):
 class Comment(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     text = models.TextField()
-
+    date = models.DateTimeField(default = datetime.now)
     def __str__(self):
         return self.name
 
@@ -90,6 +99,14 @@ class New(models.Model):
     img = models.ImageField(upload_to='news/')
     text = models.TextField(null=True,blank=True)
     text2 = models.TextField(null=True,blank=True)
+
+    en_title = models.CharField(max_length=255)
+    en_text = models.TextField(null=True,blank=True)
+    en_text2 = models.TextField(null=True,blank=True)
+
+    ru_title = models.CharField(max_length=255)
+    ru_text = models.TextField(null=True,blank=True)
+    ru_text2 = models.TextField(null=True,blank=True)
     def __str__(self):
         return self.title
 
@@ -97,6 +114,12 @@ class Advice(models.Model):
     title = models.CharField(max_length=255)
     text = models.CharField(max_length=255)
 
+    en_title = models.CharField(max_length=255)
+    en_text = models.CharField(max_length=255)
+    
+    ru_title = models.CharField(max_length=255)
+    ru_text = models.CharField(max_length=255)
+    
     def __str__(self):
         return self.text
 

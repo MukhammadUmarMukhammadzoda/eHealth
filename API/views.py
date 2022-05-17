@@ -1,7 +1,9 @@
+from unicodedata import category
 from django.shortcuts import render
 import datetime
 # Create your views here.
 from .serializers import *
+from rest_framework.generics import ListCreateAPIView
 # Create your views here.
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -9,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import authentication_classes,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.viewsets import ModelViewSet
+
 
 def check_algoritm(obj):
     if obj.height % 2 != 0:
@@ -59,12 +61,13 @@ def View_Register(request):
             height = request.POST['height']
             weight = request.POST['weight']
             type_t = int(request.POST['type_t'])
+            going_to_loss = int(request.POST["going_to_loss"])
             can_not_dieta = []
             can_not_sports = []
             user = User.objects.create(
                 gender=int(type_g),register_date=register_date,week_result=weight,age=age,
                 weight=weight,height=height,task_type=type_t,
-                username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=type_client)
+                username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=type_client,going_to_loss=going_to_loss)
             
             if type_t == 1 or type_t == 3:
                 not_sports = request.POST['can_not_sports']
@@ -105,10 +108,22 @@ def View_Task_Type(request):
 @api_view(['get','post'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
-def View_Task_Type(request):
+def View_Category(request):
     if request.method == 'GET':    
         DATA = {}
         DATA = LoaderCategoryProduct(CategoryProduct.objects.all(),many=True).data
         return Response(DATA)
+    elif request.method == 'POST':  
+        id = int(request.POST['id'])
+        products = Product.objects.filter(category__id=id)
+
+
+class CommentView(ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = LoaderComment
+    permission_classes = [IsAuthenticated]
     
-    return Response(status=100)
+    def post(self,request):
+        comment = Comment.objects.create(user=request.user,text=request.POST['text'])
+        data = LoaderComment(comment)
+        return Response(data.data)
