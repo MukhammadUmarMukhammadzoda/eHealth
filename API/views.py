@@ -42,6 +42,7 @@ def algoritm_loss(days:int,kg:int):
 
 
 @api_view(['post'])
+@permission_classes([AllowAny])
 def View_Register(request):
     type_client = request.POST['type']
     email = request.POST['email']
