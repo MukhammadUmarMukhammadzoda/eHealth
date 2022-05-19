@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import authentication_classes,permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.authentication import TokenAuthentication
 
 
@@ -96,6 +96,7 @@ def View_Register(request):
         return Response(DATA)
 
 @api_view(['get'])
+@permission_classes([AllowAny])
 def View_Product(request):
     DATA = LoaderProduct(Product.objects.all(),many=True).data
     return Response(DATA)
@@ -113,6 +114,7 @@ def View_Category(request):
         products = Product.objects.filter(category__id=id)
 
 @api_view(['get'])
+@permission_classes([AllowAny])
 def View_Sport(request):
     DATA = LoaderSport(Sport.objects.all(),many=True).data
     return Response(DATA)
@@ -128,21 +130,25 @@ class CommentView(ListCreateAPIView):
         return Response(data.data)
 
 @api_view(['get'])
+@permission_classes([AllowAny])
 def View_News(request):
     DATA = LoaderNew(New.objects.all(),many=True).data
     return Response(DATA)
 
 @api_view(['get'])
+@permission_classes([AllowAny])
 def View_News_Detail(request,pk):
     DATA = LoaderNew(New.objects.get(id=pk)).data
     return Response(DATA)
 
 @api_view(['get'])
+@permission_classes([AllowAny])
 def View_Advice(request):
     DATA = LoaderAdvice(Advice.objects.all().order_by('-id'),many=True).data
     return Response(DATA)
 
 @api_view(['get'])
+@permission_classes([AllowAny])
 def View_Advice_Random(request):
     DATA = LoaderAdvice(random.choice( Advice.objects.all().order_by('-id') )).data
     return Response(DATA)
