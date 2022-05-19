@@ -1,5 +1,5 @@
-from unicodedata import category
 from django.shortcuts import render
+import random
 import datetime
 # Create your views here.
 from .serializers import *
@@ -49,7 +49,11 @@ def View_Register(request):
     password = request.POST['password']
     first_name = request.POST['first_name']
     last_name = request.POST['last_name']
-    if len(User.objects.filter(username=username)) == 0:
+    # if len(User.objects.filter(username=username)) == 0:
+    try:
+        user = User.objects.get(username=username)
+        return Response(status=400)
+    except:
         if type_client == '2':
             bio = request.POST['bio']
             video = request.POST['video']
@@ -90,26 +94,17 @@ def View_Register(request):
                 "type_client":type_client,
             }
         return Response(DATA)
-    else:
-        return Response(status=400)
 
 @api_view(['get'])
-@permission_classes([IsAuthenticated])
-@authentication_classes([TokenAuthentication])
-def View_Task_Type(request):
-    type=request.GET['type']
-    DATA = {}
-    if type == 'product':
-        DATA = LoaderProduct(Product.objects.all(),many=True).data
-    else:
-        DATA = LoaderSport(Sport.objects.all(),many=True).data
+def View_Product(request):
+    DATA = LoaderProduct(Product.objects.all(),many=True).data
     return Response(DATA)
 
 @api_view(['get','post'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication])
 def View_Category(request):
-    if request.method == 'GET':    
+    if request.method == 'GET':   
         DATA = {}
         DATA = LoaderCategoryProduct(CategoryProduct.objects.all(),many=True).data
         return Response(DATA)
@@ -117,6 +112,10 @@ def View_Category(request):
         id = int(request.POST['id'])
         products = Product.objects.filter(category__id=id)
 
+@api_view(['get'])
+def View_Sport(request):
+    DATA = LoaderSport(Sport.objects.all(),many=True).data
+    return Response(DATA)
 
 class CommentView(ListCreateAPIView):
     queryset = Comment.objects.all()
@@ -127,3 +126,23 @@ class CommentView(ListCreateAPIView):
         comment = Comment.objects.create(user=request.user,text=request.POST['text'])
         data = LoaderComment(comment)
         return Response(data.data)
+
+@api_view(['get'])
+def View_News(request):
+    DATA = LoaderNew(New.objects.all(),many=True).data
+    return Response(DATA)
+
+@api_view(['get'])
+def View_News_Detail(request,pk):
+    DATA = LoaderNew(New.objects.get(id=pk)).data
+    return Response(DATA)
+
+@api_view(['get'])
+def View_Advice(request):
+    DATA = LoaderAdvice(Advice.objects.all().order_by('-id'),many=True).data
+    return Response(DATA)
+
+@api_view(['get'])
+def View_Advice_Random(request):
+    DATA = LoaderAdvice(random.choice( Advice.objects.all().order_by('-id') )).data
+    return Response(DATA)

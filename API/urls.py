@@ -3,7 +3,17 @@ from .views import  *
 
 urlpatterns = [
     path("register/",View_Register),
+    
     path("category-product/",View_Category),
-    path("type-task/",View_Task_Type),
+    path("sport/",View_Sport),
+    path("product/",View_Product),
+
     path("comment/",CommentView.as_view()),
+    
+    path("news/",View_News),
+    path("news/<int:pk>/",View_News_Detail),
+
+    path("advice/",View_Advice),
+    path("advice-random/",View_Advice_Random),    
+    
 ]
